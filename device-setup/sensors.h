@@ -1,5 +1,5 @@
-#pragma once
-#include <Arduino.h>
+#ifndef SENSORS_H
+#define SENSORS_H
 #include <DHT.h>
 
 class sensors {
@@ -18,3 +18,4 @@ private:
   float _temperature;
   float _humidity;
 };
+#endif

@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <WiFiS3.h>
 #include <PubSubClient.h>
-#include <DHT.h>
 #include "sensors.h"
 
 // --- CONFIGURATION ---
