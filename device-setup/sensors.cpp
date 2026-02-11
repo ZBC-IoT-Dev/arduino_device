@@ -8,6 +8,13 @@ const int redTempLedPin = 2;
 const int greenTempLedPin = 3;
 const int yellowHumidLedPin = 6;
 const int blueHumidLedPin = 7;
+const int ledPin = 9;
+
+//PIR pins
+const int pirPin = 5;
+int state = LOW;
+int value = 0;
+bool isDetected = false;
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -20,7 +27,13 @@ sensors::sensors() {
 
 void sensors::begin() {
   initializeDHT22();
+
+  pinMode(ledPin, OUTPUT);
+  pinMode(pirPin, INPUT);
+
 }
+
+//¤=========================================================================================¤
 
 void sensors::initializeDHT22() {
   dht.begin();
@@ -65,3 +78,6 @@ float sensors::getTemperature() {
 float sensors::getHumidity() {
   return _humidity;
 }
+
+//¤=========================================================================================¤
+
