@@ -1,30 +1,40 @@
 #include <Arduino.h>
-#include <WiFiS3.h>
-#include <PubSubClient.h>
+// #include <WiFiS3.h>
+//#include <PubSubClient.h>
 #include "sensors.h"
+#include "network.h"
 
 // --- CONFIGURATION ---
-const char* ssid     = "DEV";
-const char* password = "Kaffe10ko";
+// const char* ssid     = "DEV";
+// const char* password = "Kaffe10ko";
 const char* mqtt_server = "10.106.189.237"; // Example: 192.168.1.50
 
-sensors climate;
+// DELETE LATER
+const int pirPin = 5;
+int state = LOW;
+int value = 0;
+bool isDetected = false;
+const int ledPin = 9;
+// ### ### ###
 
-WiFiClient espClient;
-PubSubClient client(espClient);
+sensors climate;
+network network;
+
+//WiFiClient espClient;
+//PubSubClient client(espClient);
 
 void setup() {
   Serial.begin(9600);
   climate.begin();
-
+  network.begin();
   // Connect to WiFi
-  Serial.print("Connecting to WiFi...");
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("\n WiFi Connected!");
+  // Serial.print("Connecting to WiFi...");
+  // WiFi.begin(ssid, password);
+  // while (WiFi.status() != WL_CONNECTED) {
+  //   delay(500);
+  //   Serial.print(".");
+  // }
+  // Serial.println("\n WiFi Connected!");
 
   // Setup MQTT
   client.setServer(mqtt_server, 1883);
@@ -48,10 +58,10 @@ void connectMQTT() {
 }
 
 void loop() {
-  //if (!client.connected()) {
-  // connectMQTT();
-  //}
-  //client.loop();
+  if (!client.connected()) {
+   connectMQTT();
+  }
+  client.loop();
 
   //--CLIMATESENSOR START--
   climate.update();

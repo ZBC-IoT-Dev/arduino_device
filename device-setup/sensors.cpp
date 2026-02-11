@@ -12,9 +12,9 @@ const int ledPin = 9;
 
 //PIR pins
 const int pirPin = 5;
-int state = LOW;
-int value = 0;
-bool isDetected = false;
+//int state = LOW;
+//int value = 0;
+//bool isDetected = false;
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -81,3 +81,26 @@ float sensors::getHumidity() {
 
 //¤=========================================================================================¤
 
+/*void sensors::initializePIR(){
+   value = digitalRead(pirPin);
+
+  if (value == HIGH){
+    digitalWrite(ledPin, HIGH);
+    delay(500);
+
+    if(state == LOW){
+      Serial.println("Motion detected");
+      state = HIGH;
+      isDetected = value;
+    }
+  } else {
+    digitalWrite(ledPin, LOW);
+    delay(500);
+
+    if(state == HIGH){
+      Serial.println("The motion has stopped");
+      state = LOW;
+      isDetected = value;
+    }
+  }
+}*/
