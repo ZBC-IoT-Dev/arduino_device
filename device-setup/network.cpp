@@ -7,13 +7,17 @@ const char* _mqtt_server = "10.106.189.237"; // Example: 192.168.1.50
 WiFiClient wificlient;
 PubSubClient client(wificlient);
 
+//¤=========================================================================================¤
+
 network::network() {}
+
 
 void network::begin() {
   connectWiFi();
   client.setServer(_mqtt_server, 1883); // Setup MQTT
   Serial.println("Network initialized");
 }
+
 
 void network::connectWiFi() {
   Serial.print("Connecting to WiFi...");
@@ -24,6 +28,7 @@ void network::connectWiFi() {
   }
   Serial.println("\n WiFi Connected!");
 }
+
 
 void network::connectMQTT() {
   while (!client.connected()) {
@@ -41,3 +46,5 @@ void network::connectMQTT() {
     }
   }
 }
+
+//¤=========================================================================================¤

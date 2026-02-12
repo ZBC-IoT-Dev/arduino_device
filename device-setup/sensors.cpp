@@ -12,31 +12,31 @@ const int ledPin = 9;
 
 //PIR pins
 const int pirPin = 5;
-//int state = LOW;
-//int value = 0;
-//bool isDetected = false;
+int state = LOW;
+int value = 0;
+bool _detectionStatus;
 
-DHT dht(DHTPIN, DHTTYPE);
+//DHT dht(DHTPIN, DHTTYPE);
 
 static unsigned long lastRead = 0;
 
-sensors::sensors() {
+//¤=========================================================================================¤
+
+sensors::sensors() : dht(DHTPIN, DHTTYPE) {
   _temperature = 10;
   _humidity = 10;
 }
 
+
 void sensors::begin() {
-  initializeDHT22();
-
-  pinMode(ledPin, OUTPUT);
-  pinMode(pirPin, INPUT);
-
+  initializeDHT();
+  initializePIR();
   Serial.println("Sensors initialized");
 }
 
 //¤=========================================================================================¤
 
-void sensors::initializeDHT22() {
+void sensors::initializeDHT() {
   dht.begin();
 
   pinMode(redTempLedPin, OUTPUT);
@@ -48,7 +48,8 @@ void sensors::initializeDHT22() {
   _humidity = NAN;
 }
 
-void sensors::update() {
+
+void sensors::updateDHT() {
   if (millis() - lastRead < 2000) return;
   lastRead = millis();
 
@@ -72,9 +73,11 @@ void sensors::update() {
   digitalWrite(yellowHumidLedPin, _humidity < 40);
 }
 
+
 float sensors::getTemperature() {
   return _temperature;
 }
+
 
 float sensors::getHumidity() {
   return _humidity;
@@ -82,8 +85,14 @@ float sensors::getHumidity() {
 
 //¤=========================================================================================¤
 
-/*void sensors::initializePIR(){
-   value = digitalRead(pirPin);
+void sensors::initializePIR() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(pirPin, INPUT);
+}
+
+
+void sensors::updatePIR() {
+  value = digitalRead(pirPin);
 
   if (value == HIGH){
     digitalWrite(ledPin, HIGH);
@@ -92,7 +101,7 @@ float sensors::getHumidity() {
     if(state == LOW){
       Serial.println("Motion detected");
       state = HIGH;
-      isDetected = value;
+      _detectionStatus = value;
     }
   } else {
     digitalWrite(ledPin, LOW);
@@ -101,7 +110,14 @@ float sensors::getHumidity() {
     if(state == HIGH){
       Serial.println("The motion has stopped");
       state = LOW;
-      isDetected = value;
+      _detectionStatus = value;
     }
   }
-}*/
+}
+
+
+bool sensors::getDetectionStatus() {
+  return _detectionStatus;
+}
+
+//¤=========================================================================================¤
