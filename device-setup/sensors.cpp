@@ -31,6 +31,7 @@ void sensors::begin() {
   pinMode(ledPin, OUTPUT);
   pinMode(pirPin, INPUT);
 
+  Serial.println("Sensors initialized");
 }
 
 //¤=========================================================================================¤
