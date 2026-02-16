@@ -3,10 +3,11 @@
 
 #include <WiFiS3.h>
 #include <PubSubClient.h>
+#include "FancyLog.h"
 
 class network {
   public:
-    network();
+    network(FancyLog& fancyLog);
     void begin();
     void connectWiFi();
     void connectMQTT();
@@ -17,5 +18,7 @@ class network {
     char* _wifi_pass;
     char* _mqtt_server;
     WiFiClient wificlient;
+    FancyLog& fancyLog;
 };
+
 #endif

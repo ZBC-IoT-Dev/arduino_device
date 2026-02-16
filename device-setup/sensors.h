@@ -2,10 +2,11 @@
 #define SENSORS_H
 
 #include <DHT.h>
+#include "FancyLog.h"
 
 class sensors {
   public:
-    sensors();
+    sensors(FancyLog& fancyLog);
     void begin();
     void updateDHT();
     void updatePIR();
@@ -20,5 +21,7 @@ class sensors {
     float _humidity;
     bool _detectionStatus;
     DHT dht;
+    FancyLog& fancyLog;
 };
+
 #endif

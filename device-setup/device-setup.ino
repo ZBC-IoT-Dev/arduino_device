@@ -1,14 +1,16 @@
 #include <Arduino.h>
 #include "sensors.h"
 #include "network.h"
+#include "FancyLog.h"
 
-sensors sensors;
-network network;
+FancyLog fancyLog;
+sensors sensors(fancyLog);
+network network(fancyLog);
 
 //¤=========================================================================================¤
 
 void setup() {
-  Serial.begin(9600);
+  fancyLog.begin(9600);
   sensors.begin();
   network.begin();
 }
@@ -37,7 +39,7 @@ void loop() {
     network.client.publish("sensors/climate", climateJson.c_str());
   }
 
-  Serial.println("temp: " + String(sensors.getTemperature()) + " | humid: " + String(sensors.getHumidity()));
+  fancyLog.toSerial("temp: " + String(sensors.getTemperature()) + " | humid: " + String(sensors.getHumidity()));
   //--CLIMATESENSOR END--
 
   sensors.updatePIR();
@@ -47,8 +49,8 @@ void loop() {
   String jsonPayload = "{\"id\": \"arduino_stue_1\", \"type\": \"MotionSensor\", \"detectionStatus\":" + String(sensors.getDetectionStatus()) + "}";
   //String jsonPayload = "{\"id\": \"arduino_stue_1\", \"type\": \"MotionSensor\", \"isDetected\":" + String(isDetected ? "true" : "false") + "}";
 
-  Serial.println("Sending discovery pulse...");
-  Serial.println("discovery/announce" + String(jsonPayload));
+  fancyLog.toSerial("Sending discovery pulse...");
+  fancyLog.toSerial("discovery/announce" + String(jsonPayload), INFO);
   network.client.publish("discovery/announce", jsonPayload.c_str());
 
   // Wait 0,5 seconds before next shout

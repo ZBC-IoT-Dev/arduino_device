@@ -22,7 +22,7 @@ static unsigned long lastRead = 0;
 
 //¤=========================================================================================¤
 
-sensors::sensors() : dht(DHTPIN, DHTTYPE) {
+sensors::sensors(FancyLog& fancyLog) : fancyLog(fancyLog), dht(DHTPIN, DHTTYPE) {
   _temperature = 10;
   _humidity = 10;
 }
@@ -31,7 +31,6 @@ sensors::sensors() : dht(DHTPIN, DHTTYPE) {
 void sensors::begin() {
   initializeDHT();
   initializePIR();
-  Serial.println("Sensors initialized");
 }
 
 //¤=========================================================================================¤
@@ -46,6 +45,8 @@ void sensors::initializeDHT() {
 
   _temperature = NAN;
   _humidity = NAN;
+
+  fancyLog.toSerial("DHT sensor initialized");
 }
 
 
@@ -57,7 +58,7 @@ void sensors::updateDHT() {
   float humidity = dht.readHumidity();
 
   if (isnan(temperature) || isnan(humidity)) {
-    Serial.println("DHT22 read failed");
+    fancyLog.toSerial("DHT22 read failed", ERROR);
     return;
   }
 
@@ -88,6 +89,8 @@ float sensors::getHumidity() {
 void sensors::initializePIR() {
   pinMode(ledPin, OUTPUT);
   pinMode(pirPin, INPUT);
+
+  fancyLog.toSerial("PIR sensor initialized");
 }
 
 
@@ -99,7 +102,7 @@ void sensors::updatePIR() {
     delay(500);
 
     if(state == LOW){
-      Serial.println("Motion detected");
+      fancyLog.toSerial("Motion detected", INFO);
       state = HIGH;
       _detectionStatus = value;
     }
@@ -108,7 +111,7 @@ void sensors::updatePIR() {
     delay(500);
 
     if(state == HIGH){
-      Serial.println("The motion has stopped");
+      fancyLog.toSerial("The motion has stopped", INFO);
       state = LOW;
       _detectionStatus = value;
     }
